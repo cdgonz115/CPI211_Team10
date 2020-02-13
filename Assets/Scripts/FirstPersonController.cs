@@ -67,8 +67,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private void Update()
         {
             RotateView();
-            if (!gravity && Input.GetKeyDown(KeyCode.E)) gravity = true;
-            else gravity = false;
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                if (!gravity) gravity = true;
+                else gravity = false;
+            }
             // the jump state needs to read here to make sure it is not missed
             if (!m_Jump)
             {
@@ -100,9 +103,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
         private void FixedUpdate()
         {
-
-
-
             float speed;
             GetInput(out speed);
             // always move along the camera forward as it is the direction that it being aimed at
@@ -120,7 +120,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
             if (m_CharacterController.isGrounded)
             {
-                m_MoveDir.y = -m_StickToGroundForce;
+                m_MoveDir.y = (gravity) ? m_StickToGroundForce :- m_StickToGroundForce;
 
                 if (m_Jump)
                 {
