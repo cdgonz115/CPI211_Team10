@@ -230,7 +230,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             // get the rotation before it's changed
             float oldYRotation = transform.eulerAngles.y;
 
-            mouseLook.LookRotation (transform, cam.transform);
+            mouseLook.LookRotation (transform, cam.transform,false);
 
             if (m_IsGrounded || advancedSettings.airControl)
             {
@@ -245,6 +245,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         {
             m_PreviouslyGrounded = m_IsGrounded;
             RaycastHit hitInfo;
+
             if (Physics.SphereCast(transform.position, m_Capsule.radius * (1.0f - advancedSettings.shellOffset), Vector3.down, out hitInfo,
                                    ((m_Capsule.height/2f) - m_Capsule.radius) + advancedSettings.groundCheckDistance, Physics.AllLayers, QueryTriggerInteraction.Ignore))
             {

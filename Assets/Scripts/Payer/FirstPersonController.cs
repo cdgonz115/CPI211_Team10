@@ -13,12 +13,13 @@ namespace UnityStandardAssets.Characters.FirstPerson
     public class FirstPersonController : MonoBehaviour
     {
         [SerializeField] public bool m_IsWalking;
+        [SerializeField] public bool gravity=false;
         [SerializeField] public float m_WalkSpeed;
         [SerializeField] private float m_RunSpeed;
         [SerializeField] [Range(0f, 1f)] private float m_RunstepLenghten;
         [SerializeField] private float m_JumpSpeed;
         [SerializeField] private float m_StickToGroundForce;
-        [SerializeField] private float m_GravityMultiplier;
+        [SerializeField] public float m_GravityMultiplier;
         [SerializeField] private MouseLook m_MouseLook;
         [SerializeField] private bool m_UseFovKick;
         [SerializeField] private FOVKick m_FovKick = new FOVKick();
@@ -30,6 +31,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         [SerializeField] private AudioClip m_JumpSound;           // the sound played when character leaves the ground.
         [SerializeField] private AudioClip m_LandSound;           // the sound played when character touches back on ground.
 
+        private bool inverseGround=false;
         private Camera m_Camera;
         private bool m_Jump;
         private float m_YRotation;
@@ -66,25 +68,31 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private void Update()
         {
             RotateView();
-            // the jump state needs to read here to make sure it is not missed
-            if (!m_Jump)
+            if (Input.GetKeyDown(KeyCode.E))
             {
-                m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
+                gravity = !gravity;
+                //transform.Rotate(new Vector3(180, 0, 0));
             }
-
-            if (!m_PreviouslyGrounded && m_CharacterController.isGrounded)
+            // the jump state needs to read here to make sure it is not missed
+            if (!m_PreviouslyGrounded && (m_CharacterController.isGrounded || inverseGround))
             {
                 StartCoroutine(m_JumpBob.DoBobCycle());
                 PlayLandingSound();
+                //print("doing1");
                 m_MoveDir.y = 0f;
                 m_Jumping = false;
             }
-            if (!m_CharacterController.isGrounded && !m_Jumping && m_PreviouslyGrounded)
+            //print(!m_CharacterController.isGrounded+"G");
+            //print(!inverseGround+"!G");
+            //print(!m_Jumping+"J");
+            //print(m_PreviouslyGrounded+"Pg");
+            if ((!m_CharacterController.isGrounded || !inverseGround) && !m_Jumping && m_PreviouslyGrounded)
             {
+                //print("doing2");
                 m_MoveDir.y = 0f;
             }
 
-            m_PreviouslyGrounded = m_CharacterController.isGrounded;
+            m_PreviouslyGrounded = (!gravity) ? m_CharacterController.isGrounded:inverseGround;
         }
 
         private void PlayLandingSound()
@@ -97,9 +105,6 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
         private void FixedUpdate()
         {
-
-
-
             float speed;
             GetInput(out speed);
             // always move along the camera forward as it is the direction that it being aimed at
@@ -115,13 +120,13 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_MoveDir.z = desiredMove.z * speed;
 
 
-            if (m_CharacterController.isGrounded)
+            inverseGround = Physics.Raycast(transform.position, Vector3.up, out hitInfo, GetComponentInChildren<CapsuleCollider>().bounds.extents.y + .989f);
+            if ((!gravity && m_CharacterController.isGrounded) ||  (inverseGround && gravity))
             {
-                m_MoveDir.y = -m_StickToGroundForce;
-
-                if (m_Jump)
+                m_MoveDir.y = (gravity) ? m_StickToGroundForce : -m_StickToGroundForce;
+                if (CrossPlatformInputManager.GetButtonDown("Jump"))
                 {
-                    m_MoveDir.y = m_JumpSpeed;
+                    m_MoveDir.y = (gravity)?-m_JumpSpeed:m_JumpSpeed;
                     PlayJumpSound();
                     m_Jump = false;
                     m_Jumping = true;
@@ -129,7 +134,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             }
             else
             {
-                m_MoveDir += Physics.gravity * m_GravityMultiplier * Time.fixedDeltaTime;
+                m_MoveDir += Physics.gravity * ((gravity) ? -m_GravityMultiplier : m_GravityMultiplier) * Time.fixedDeltaTime;
             }
             m_CollisionFlags = m_CharacterController.Move(m_MoveDir * Time.fixedDeltaTime);
 
@@ -240,7 +245,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
         private void RotateView()
         {
-            m_MouseLook.LookRotation (transform, m_Camera.transform);
+            m_MouseLook.LookRotation (transform, m_Camera.transform,gravity);
+            if (gravity) transform.Rotate(180, transform.rotation.y, transform.rotation.z);
         }
 
 
