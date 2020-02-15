@@ -12,6 +12,7 @@ public class Rifle : MonoBehaviour
     public Transform bulletSpawn;
     public int BulletSpeed;
     public string id;
+    public GameObject player;
 
     // Use this for initialization
     void Start ()
@@ -45,7 +46,8 @@ public class Rifle : MonoBehaviour
     {
 
             GameObject bullet = Instantiate(bulletPrefab, bulletSpawn.position, bulletSpawn.rotation);
-            bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * BulletSpeed;
+            bullet.transform.Rotate(new Vector3(-90,0,0));
+            bullet.GetComponent<Rigidbody>().velocity = player.GetComponent<Rigidbody>().velocity - bullet.transform.up * BulletSpeed;
             Destroy(bullet, 2.0f);
     }
     public void Reload()

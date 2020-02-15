@@ -6,19 +6,13 @@ using UnityEngine.UI;
 public class Looking : MonoBehaviour
 {
     [SerializeField] public Text message;
-    // Use this for initialization
-    void Start()
-    {
+    public GameObject bulletSpawn;
 
-    }
-
-    // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         RaycastHit hit;
-        if ((Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 5, 1)))
+        if ((Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity)))
         {
-
             if (hit.collider.gameObject.name == "Shotgun")
             {
 
@@ -46,11 +40,22 @@ public class Looking : MonoBehaviour
                     Destroy(hit.collider.gameObject);
                 }
             }
+            if (hit.collider.gameObject.tag == "Enemy")
+            {
+                bulletSpawn.GetComponent<LookAtEnemy>().lookTowards(hit.transform.position);
+            }
 
         }
         else
         {
             message.text = " ";
         }
+    }
+    void OnDrawGizmosSelected()
+    {
+        // Draws a 5 unit long red line in front of the object
+        Gizmos.color = Color.red;
+        Vector3 direction = transform.TransformDirection(Vector3.forward) * 10;
+        Gizmos.DrawRay(transform.position, direction);
     }
 }

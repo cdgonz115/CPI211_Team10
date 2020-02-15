@@ -120,7 +120,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_MoveDir.z = desiredMove.z * speed;
 
 
-            inverseGround = Physics.Raycast(transform.position, Vector3.up, out hitInfo, GetComponentInChildren<CapsuleCollider>().bounds.extents.y + .989f);
+            inverseGround = Physics.Raycast(transform.position, Vector3.up, out hitInfo, GetComponentInChildren<CapsuleCollider>().bounds.extents.y);
             if ((!gravity && m_CharacterController.isGrounded) ||  (inverseGround && gravity))
             {
                 m_MoveDir.y = (gravity) ? m_StickToGroundForce : -m_StickToGroundForce;
