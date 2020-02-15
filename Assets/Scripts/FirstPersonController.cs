@@ -31,6 +31,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         [SerializeField] private AudioClip m_JumpSound;           // the sound played when character leaves the ground.
         [SerializeField] private AudioClip m_LandSound;           // the sound played when character touches back on ground.
 
+        private bool inverseGround=false;
         private Camera m_Camera;
         private bool m_Jump;
         private float m_YRotation;
@@ -69,28 +70,29 @@ namespace UnityStandardAssets.Characters.FirstPerson
             RotateView();
             if (Input.GetKeyDown(KeyCode.E))
             {
-                if (!gravity) gravity = true;
-                else gravity = false;
+                gravity = !gravity;
+                //transform.Rotate(new Vector3(180, 0, 0));
             }
             // the jump state needs to read here to make sure it is not missed
-            if (!m_Jump)
-            {
-                m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
-            }
-
-            if (!m_PreviouslyGrounded && m_CharacterController.isGrounded)
+            if (!m_PreviouslyGrounded && (m_CharacterController.isGrounded || inverseGround))
             {
                 StartCoroutine(m_JumpBob.DoBobCycle());
                 PlayLandingSound();
+                //print("doing1");
                 m_MoveDir.y = 0f;
                 m_Jumping = false;
             }
-            if (!m_CharacterController.isGrounded && !m_Jumping && m_PreviouslyGrounded)
+            //print(!m_CharacterController.isGrounded+"G");
+            //print(!inverseGround+"!G");
+            //print(!m_Jumping+"J");
+            //print(m_PreviouslyGrounded+"Pg");
+            if ((!m_CharacterController.isGrounded || !inverseGround) && !m_Jumping && m_PreviouslyGrounded)
             {
+                //print("doing2");
                 m_MoveDir.y = 0f;
             }
 
-            m_PreviouslyGrounded = m_CharacterController.isGrounded;
+            m_PreviouslyGrounded = (!gravity) ? m_CharacterController.isGrounded:inverseGround;
         }
 
         private void PlayLandingSound()
@@ -118,11 +120,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
             m_MoveDir.z = desiredMove.z * speed;
 
 
-            if (m_CharacterController.isGrounded)
+            inverseGround = Physics.Raycast(transform.position, Vector3.up, out hitInfo, GetComponentInChildren<CapsuleCollider>().bounds.extents.y + .989f);
+            if ((!gravity && m_CharacterController.isGrounded) ||  (inverseGround && gravity))
             {
-                m_MoveDir.y = (gravity) ? m_StickToGroundForce :- m_StickToGroundForce;
-
-                if (m_Jump)
+                m_MoveDir.y = (gravity) ? m_StickToGroundForce : -m_StickToGroundForce;
+                if (CrossPlatformInputManager.GetButtonDown("Jump"))
                 {
                     m_MoveDir.y = (gravity)?-m_JumpSpeed:m_JumpSpeed;
                     PlayJumpSound();
@@ -243,7 +245,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
 
         private void RotateView()
         {
-            m_MouseLook.LookRotation (transform, m_Camera.transform);
+            m_MouseLook.LookRotation (transform, m_Camera.transform,gravity);
+            if (gravity) transform.Rotate(180, transform.rotation.y, transform.rotation.z);
         }
 
 
