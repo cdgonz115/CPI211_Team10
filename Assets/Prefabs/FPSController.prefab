@@ -582,7 +582,7 @@ MonoBehaviour:
   InClip: 30
   ClipSize: 30
   MaxAmmo: 120
-  bulletPrefab: {fileID: 1023616107673478, guid: 05b21932d3bd9f7418c8afe27263625c,
+  bulletPrefab: {fileID: 5797054232453985144, guid: bb1ce2d9a708d7841858abea4f62b6b1,
     type: 3}
   bulletSpawn: {fileID: 9178857115258442044}
   BulletSpeed: 60
@@ -840,14 +840,32 @@ MonoBehaviour:
     TimeToDecrease: 1
     IncreaseCurve:
       serializedVersion: 2
-      m_Curve: []
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 2
+        outSlope: 2
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
   m_UseHeadBob: 1
   m_HeadBob:
-    HorizontalBobRange: 0.33
-    VerticalBobRange: 0.33
+    HorizontalBobRange: 0.1
+    VerticalBobRange: 0.1
     Bobcurve:
       serializedVersion: 2
       m_Curve:
@@ -899,7 +917,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    VerticaltoHorizontalRatio: 1
+    VerticaltoHorizontalRatio: 2
   m_JumpBob:
     BobDuration: 0
     BobAmount: 0
