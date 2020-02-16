@@ -7,7 +7,11 @@ using UnityEngine.AI;
 
 public class EnemyMove : MonoBehaviour
 {
+<<<<<<< Updated upstream
     public float moveSpeed = 4f;
+=======
+    public float moveSpeed;
+>>>>>>> Stashed changes
     public Transform target;
     public Transform enemies;
     Rigidbody rbody;
@@ -15,6 +19,10 @@ public class EnemyMove : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+<<<<<<< Updated upstream
+=======
+        moveSpeed = Random.Range(.05f, 4f);
+>>>>>>> Stashed changes
         target = GameObject.FindGameObjectWithTag("Player").transform;
         rbody = GetComponent<Rigidbody>();
     }
@@ -27,5 +35,9 @@ public class EnemyMove : MonoBehaviour
         {
             enemies.position = Vector3.MoveTowards(enemies.position, target.position, Time.deltaTime * moveSpeed);
         }
+<<<<<<< Updated upstream
+=======
+        
+>>>>>>> Stashed changes
     }
 }
