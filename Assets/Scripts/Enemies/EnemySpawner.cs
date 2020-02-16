@@ -4,13 +4,14 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    int enemyNum = 3;
-    int keyTrigger = 5;
+
+    private int enemies;
     public GameObject Enemy;
+    private float timeLeft;
     // Start is called before the first frame update
     void Start()
     {
-        for (int i = 0; i < enemyNum; i++)
+        for (int i = 0; i < 3; i++)
         {
             SpawnEnemy();
         }
@@ -19,20 +20,25 @@ public class EnemySpawner : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (keyTrigger == 5)
+        timeLeft -= Time.deltaTime;
+        if (enemies < 10)
         {
-
+            if (timeLeft <= 0)
+            {
+                SpawnEnemy();
+            }
+            else if (enemies <= 0)
+            {
+                SpawnEnemy();
+            }
         }
-        else if (keyTrigger != 5 && enemyNum < 3)
-        {
-            SpawnEnemy();
-        }
+        
     }
 
     private void SpawnEnemy()
     {
-        Vector3 spawnPos = new Vector3(transform.position.x, transform.position.y, 0);
-        GameObject octo = Instantiate(Enemy, spawnPos, Quaternion.identity) as GameObject;
-        keyTrigger++;
+        GameObject octo = Instantiate(Enemy, transform.position, Quaternion.identity);
+        timeLeft = Random.Range(5f, 10f);
+        enemies++;
     }
 }

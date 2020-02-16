@@ -5,7 +5,8 @@ using UnityEngine;
 public class MoveEnemy : MonoBehaviour
 {
     public float moveSpeed;
-    public Transform target;
+    //public Transform target;
+    //public GameObject wtf;
 
     // Start is called before the first frame update
     void Start()
@@ -14,14 +15,27 @@ public class MoveEnemy : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        float distance = Vector3.Distance(transform.position, target.position);
-        transform.LookAt(target);
-        if (distance >= 2)
+
+        if (GameObject.Find("FPSController"))
         {
-            transform.position = Vector3.MoveTowards(transform.position, target.position, Time.deltaTime * moveSpeed);
+
+            float distance = Vector3.Distance(transform.position, GameObject.Find("FPSController").GetComponent<Transform>().position);
+            transform.LookAt(GameObject.Find("FPSController").GetComponent<Transform>().position);
+            if (distance >= 2)
+            {
+
+                transform.position = Vector3.MoveTowards(transform.position, GameObject.Find("FPSController").GetComponent<Transform>().position, Time.deltaTime * moveSpeed);
+            }
+            else GameObject.Find("FPSController").GetComponent<Health>().takeDamage();
+
+        }
+        else
+        {
+            transform.position = Vector3.MoveTowards(transform.position, new Vector3(7, 17, 7), Time.deltaTime * moveSpeed);
         }
 
     }
+    
 }
