@@ -17,6 +17,7 @@ public class MoveEnemy : MonoBehaviour
     void Update()
     {
         float distance = Vector3.Distance(transform.position, target.position);
+        transform.LookAt(target);
         if (distance >= 2)
         {
             transform.position = Vector3.MoveTowards(transform.position, target.position, Time.deltaTime * moveSpeed);
