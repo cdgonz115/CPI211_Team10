@@ -13,27 +13,6 @@ public class Looking : MonoBehaviour
         RaycastHit hit;
         if ((Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, Mathf.Infinity)))
         {
-
-		//Gravity control may also be using E
-		//GetComponent may need to be GetComponentInParent for accessibility
-	    if (hit.collider.gameObject.tag == "Key")
-            {
-
-                message.text = "Press E to Pick Up";
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-                    GetComponentInParent<PlayerKeyControl>().AddKey(hit.collider.gameObject);
-                }
-            }
-	    if (hit.collider.gameObject.tag == "Door" && GetComponentInParent<PlayerKeyControl>().GetKeyNumber() > 0)
-            {
-
-                message.text = "Press E to Open";
-                if (Input.GetKeyDown(KeyCode.E))
-                {
-                    GetComponentInParent<PlayerKeyControl>().OpenDoor(hit.collider.gameObject);
-                }
-            }
             if (hit.collider.gameObject.name == "Shotgun")
             {
 
@@ -43,7 +22,6 @@ public class Looking : MonoBehaviour
                     GetComponent<Weapons>().AddWeapon(hit.collider.gameObject);
                 }
             }
-	    
             if (hit.collider.gameObject.tag == "Rifle Ammo")
             {
                 message.text = "Press E to Pick Up Rifle Ammo";
