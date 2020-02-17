@@ -26,9 +26,8 @@ public class AI : MonoBehaviour
     {
         if (health <=0)
         {
-            
+            if(GameObject.Find("FPSController")) GameObject.Find("FPSController").GetComponent<EnemiesUI>().killed++;
             DestroyGameObject();
-            enemyCount--;
         }
         healthBar.fillAmount =(health / enemyHealth);
  

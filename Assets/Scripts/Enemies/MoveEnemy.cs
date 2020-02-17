@@ -33,7 +33,7 @@ public class MoveEnemy : MonoBehaviour
         }
         else
         {
-            transform.position = Vector3.MoveTowards(transform.position, new Vector3(7, 17, 7), Time.deltaTime * moveSpeed);
+            transform.position = Vector3.MoveTowards(transform.position, new Vector3(-307, 12, 169), Time.deltaTime * moveSpeed);
         }
 
     }

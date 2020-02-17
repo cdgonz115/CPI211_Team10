@@ -26,7 +26,6 @@ public class FlyAway : MonoBehaviour
             if (x == 250) gameStatusText.enabled = true;
             yield return new WaitForFixedUpdate();
         }
-        print("sup");
         Application.Quit();
     }
 }

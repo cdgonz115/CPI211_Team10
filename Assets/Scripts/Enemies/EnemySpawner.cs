@@ -5,7 +5,7 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
 
-    private int enemies;
+    public int enemies;
     public GameObject Enemy;
     private float timeLeft;
     // Start is called before the first frame update
