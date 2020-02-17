@@ -17,7 +17,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         [SerializeField] public float m_WalkSpeed;
         [SerializeField] private float m_RunSpeed;
         [SerializeField] [Range(0f, 1f)] private float m_RunstepLenghten;
-        [SerializeField] private float m_JumpSpeed;
+        [SerializeField] public float m_JumpSpeed;
         [SerializeField] private float m_StickToGroundForce;
         [SerializeField] public float m_GravityMultiplier;
         [SerializeField] private MouseLook m_MouseLook;
@@ -31,6 +31,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
         [SerializeField] private AudioClip m_JumpSound;           // the sound played when character leaves the ground.
         [SerializeField] private AudioClip m_LandSound;           // the sound played when character touches back on ground.
 
+        public bool keyUnlocked=false;
         private bool inverseGround=false;
         private Camera m_Camera;
         private bool m_Jump;
@@ -68,11 +69,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
         private void Update()
         {
             RotateView();
-            if (Input.GetKeyDown(KeyCode.E))
+            /*if (Input.GetKeyDown(KeyCode.E))
             {
                 gravity = !gravity;
                 //transform.Rotate(new Vector3(180, 0, 0));
-            }
+            }*/
             // the jump state needs to read here to make sure it is not missed
             if (!m_PreviouslyGrounded && (m_CharacterController.isGrounded || inverseGround))
             {

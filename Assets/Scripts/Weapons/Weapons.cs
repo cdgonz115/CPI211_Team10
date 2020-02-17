@@ -65,7 +65,7 @@ public class Weapons : MonoBehaviour
         string temp="";
         if(weapons[WeaponLocation].name == "Rifle")
         {
-            temp = GameObject.Find("Rifle").GetComponent<Rifle>().getAmmoText();
+            if(GameObject.Find("Rifle")) temp = GameObject.Find("Rifle").GetComponent<Rifle>().getAmmoText();
         }
         else if(weapons[WeaponLocation].name == "Shotgun")
         {

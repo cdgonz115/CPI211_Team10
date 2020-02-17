@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityStandardAssets.Characters.FirstPerson;
 
 public class Rifle : MonoBehaviour
 {
@@ -13,13 +14,16 @@ public class Rifle : MonoBehaviour
     public int BulletSpeed;
     public string id;
     public GameObject player;
+    public AudioSource ads;
+    [SerializeField] private AudioClip[] sounds;
+    public GameObject tel;
 
     // Use this for initialization
     void Start ()
     {
         id = "Rifle";
         InClip = ClipSize;
-        TotalAmmo = InClip;
+        TotalAmmo = MaxAmmo;
     }
     private void FixedUpdate()
     {
@@ -27,8 +31,17 @@ public class Rifle : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Mouse0) && InClip != 0)
             {
                 Fire();
-                InClip--;
-            }
+                if (tel.GetComponentInChildren<Teleporter>().teleported)
+                {
+                    ads.PlayOneShot(sounds[1]);
+                    ads.volume = 1;
+                }
+                else
+                {
+                    ads.PlayOneShot(sounds[0]);
+                    ads.volume = .75f;
+                }
+        }
             if (Input.GetKeyDown(KeyCode.R))
             {
                 Reload();
@@ -49,6 +62,7 @@ public class Rifle : MonoBehaviour
             bullet.transform.Rotate(new Vector3(-90,0,0));
             bullet.GetComponent<Rigidbody>().velocity = player.GetComponent<Rigidbody>().velocity - bullet.transform.up * BulletSpeed;
             Destroy(bullet, 2.0f);
+            InClip--;
     }
     public void Reload()
     {
